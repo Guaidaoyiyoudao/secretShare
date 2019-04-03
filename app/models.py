@@ -1,6 +1,6 @@
 from peewee import *
 from flask_login import UserMixin
-from . import login_manager
+from app import login_manager
 db = SqliteDatabase('secret.db')
 
 class Base(Model):
@@ -26,7 +26,7 @@ class SubSecret(Base):
 
     id = IntegerField(primary_key=True,index=True)
     userId = ForeignKeyField(User,User.id,'subSecret')
-
+    secImg = CharField(unique=True)
 
 class Secret(Base):
     userId = ForeignKeyField(User,User.id,'secret')
