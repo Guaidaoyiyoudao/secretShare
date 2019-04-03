@@ -11,6 +11,9 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'secret.sqlite'),
     )
 
+    from . import auth
+    app.register_blueprint(auth.bp)
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)

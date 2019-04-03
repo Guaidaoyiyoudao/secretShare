@@ -1,5 +1,5 @@
 from peewee import *
-
+from flask_login import UserMixin
 db = SqliteDatabase('secret.db')
 
 class Base(Model):
@@ -7,7 +7,7 @@ class Base(Model):
     class Meta:
         database = db
 
-class User(Base):
+class User(UserMixin,Base):
 
     id = IntegerField(primary_key=True,index=True)
     username = CharField(unique=True)
