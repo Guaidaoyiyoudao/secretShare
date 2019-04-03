@@ -1,5 +1,6 @@
 from peewee import *
 from flask_login import UserMixin
+from . import login_manager
 db = SqliteDatabase('secret.db')
 
 class Base(Model):
@@ -17,6 +18,9 @@ class User(UserMixin,Base):
     def generate_password_hash(self,password):
         pass
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.select().where(User.id==user_id)
 
 class SubSecret(Base):
 
