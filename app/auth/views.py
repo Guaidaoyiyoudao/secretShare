@@ -1,10 +1,11 @@
-from flask import render_template, redirect, request, url_for, flash
-from flask_login import login_user, logout_user, login_required,current_user
-from . import auth
-from app import db
-from app import models
-from .forms import RegisterForm,LoginForm
+from flask import flash, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
 
+from app.models import User, db
+from peewee import DoesNotExist
+
+from app.auth import auth
+from app.auth.forms import LoginForm, RegisterForm
 
 
 
@@ -16,10 +17,10 @@ def register():
         
         username = form.username.data
         password = form.password.data
-
-        
-
-
+        print("[log] 用户不存在，创建")    
+        user = User(username=username,password=password)
+        user.save()
+            
         return redirect(url_for('auth.login'))
 
     return render_template('register.html',form=form)
@@ -27,9 +28,20 @@ def register():
 #TODO 完善登录功能
 @auth.route('/login',methods=['GET','POST'])
 def login():
+
     form = LoginForm()
-    if form.is_submitted():
-            return redirect(url_for('main.index'))
+
+    
+    if form.validate_on_submit():
+        
+        try:
+            user = User.select().where(User.username==form.username.data).get()
+        except DoesNotExist:
+            flash("用户名不存在")
+            return render_template("login.html",form=form)
+        if User.check_password(form.password.data):
+            login_user(user)
+        return redirect(url_for('main.index'))
     return render_template("login.html",form=form)
 
 @auth.route('/logout')
@@ -38,3 +50,14 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
+
+
+
+@auth.before_request
+def before_request():
+    db.connect()
+
+@auth.after_request
+def after_request(response):
+    db.close()
+    return response

@@ -20,7 +20,7 @@ def create_app(test_config=None):
     login_manager.init_app(app)
     login_manager.login_view='auth.login'
 
-    #view register
+    #bp register
     from .auth import auth
     app.register_blueprint(auth)
 
