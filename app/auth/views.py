@@ -17,11 +17,16 @@ def register():
         
         username = form.username.data
         password = form.password.data
-        print("[log] 用户不存在，创建")    
-        user = User(username=username,password=password)
-        user.save()
+        try:
+            user = User.select().where(User.username==form.username.data).get()
+        except DoesNotExist as e:
+            user = User(username=username,password=password)
+            user.save()
+            flash("帐号注册成功 %s"%username)
+            return redirect(url_for('auth.login'))
             
-        return redirect(url_for('auth.login'))
+        flash("用户名不存在")
+        return render_template("register.html",form=form)
 
     return render_template('register.html',form=form)
 
