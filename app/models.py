@@ -16,13 +16,12 @@ class User(UserMixin,Base):
     password_hash = CharField()
 
     
-    @classmethod
-    def check_password(self,pwd):
-        return check_password_hash(self.password_hash,pwd)
+    def check_password(self,password_hash,pwd):
+        return check_password_hash(password_hash,pwd)
 
     @property
     def password(self):
-        raise AttributeError('password is not a readable attribute')
+        return self.password_hash
 
     @password.setter
     def password(self, password):

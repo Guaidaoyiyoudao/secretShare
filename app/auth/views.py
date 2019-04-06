@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for,abort,flash
 from flask_login import current_user, login_required, login_user, logout_user
 
 from app.models import User, db
@@ -36,12 +36,17 @@ def login():
         
         try:
             user = User.select().where(User.username==form.username.data).get()
-        except DoesNotExist:
+        except DoesNotExist as e:
             flash("用户名不存在")
             return render_template("login.html",form=form)
-        if User.check_password(form.password.data):
+        if user.check_password(user.password,form.password.data):
             login_user(user)
+            return redirect(url_for('main.index'))
+    #登录了就直接重定向到首页
+    elif current_user.is_authenticated:
         return redirect(url_for('main.index'))
+    
+
     return render_template("login.html",form=form)
 
 @auth.route('/logout')
@@ -49,7 +54,7 @@ def login():
 def logout():
     logout_user()
     flash('You have been logged out.')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('auth.login'))
 
 
 
