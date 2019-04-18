@@ -7,4 +7,4 @@ from flask_login import login_required
 @main.route('/')
 @login_required
 def index():
-    return "<h1>index page</h1>"
+    return render_template('index.html')
