@@ -1,7 +1,29 @@
 {% extends "Base.html" %}
-{% block title %}秘密共享 - 主页{% endblock %}
 
+{% block navbar %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{url_for('main.index')}}">秘密共享</a>
+        </div>
 
-{% block body %}
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="{{url_for('main.index')}}">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="{{url_for('auth.logout')}}">Logout</a></li>
+            </ul>
 
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+{% block content%}
+<div class="container">
+
+    
+</div>
 {% endblock %}

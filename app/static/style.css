@@ -1,10 +1,30 @@
-.login-form{
-    padding: 10px;
-    margin: 5rem auto;
-    width:50%;
+.login-form,.register-form{
+    width: 50%;
+    height: auto;
+    padding: 2rem;
+    border: 0.5px solid #99CCFF;
+    border-radius: 0.5rem;
+    margin: 3rem auto;
+    background-color: rgba(red, green, blue, alpha);
 }
-.flash-message{
-    
+header{
+    text-align: center;
+    color: #6699CC;
+    font-size:5em;
+
+}
+.register-button::before{
+    content: "还没有有帐号?";
+    font-size: 0.5rem;
+    color:#CCCCFF;
 
 
+}
+.login-button::before{
+    content: "已经有帐号?";
+    font-size: 0.5rem;
+    color:#CCCCFF;
+}
+.register-button,.login-button{
+    margin-top: 1rem;
 }
