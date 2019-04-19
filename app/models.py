@@ -31,16 +31,20 @@ class User(UserMixin,Base):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.select().where(User.id==user_id).get()
+    try:
+        return User.select().where(User.id==user_id).get()
+    except DoesNotExist as e:
+        return None
 
 class SubSecret(Base):
 
     id = IntegerField(primary_key=True,index=True)
-    userId = ForeignKeyField(User,User.id,'subSecret')
-    secImg = CharField(unique=True)
-
+    user = ForeignKeyField(User,backref="subSecrets")
+    secretHash = CharField(unique=True)
+    subSecretHash = CharField()
 class Secret(Base):
-    userId = ForeignKeyField(User,User.id,'secret')
-    subSecId = ForeignKeyField(SubSecret,SubSecret.id)
+
+    user = ForeignKeyField(User,backref="secrets")
+    secretHash = CharField(unique=True)
     id = AutoField(primary_key=True)
-    secImg = CharField()
+    shareNums = IntegerField()
