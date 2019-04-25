@@ -42,9 +42,11 @@ class SubSecret(Base):
     user = ForeignKeyField(User,backref="subSecrets")
     secretHash = CharField(unique=True)
     subSecretHash = CharField()
+
+    
 class Secret(Base):
 
-    user = ForeignKeyField(User,backref="secrets")
+    owner = ForeignKeyField(User,backref="secrets")
     secretHash = CharField(unique=True)
     id = AutoField(primary_key=True)
     shareNums = IntegerField()

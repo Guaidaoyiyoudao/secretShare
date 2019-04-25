@@ -14,14 +14,14 @@ header{
 
 }
 .register-button::before{
-    content: "还没有有帐号?";
+    content: "已经有帐号?";
     font-size: 0.5rem;
     color:#CCCCFF;
 
 
 }
 .login-button::before{
-    content: "已经有帐号?";
+    content: "还没有有帐号?";
     font-size: 0.5rem;
     color:#CCCCFF;
 }
