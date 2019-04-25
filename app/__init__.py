@@ -18,6 +18,7 @@ def create_app(test_config=None):
 
     #flask-login
     login_manager.init_app(app)
+    login_manager.login_message ="你还没有登录，请先登录！"
     login_manager.login_view='auth.login'
 
     #bp register

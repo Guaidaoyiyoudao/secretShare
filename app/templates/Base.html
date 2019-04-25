@@ -1,10 +1,41 @@
 {% extends "bootstrap/base.html" %}
 
 {% block head %}
-    {{ super() }}
-    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}"/>
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}" />
 {% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="collapse navbar-collapse">
+        <a class="navbar-brand" href="/">秘密共享</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</span></a>
+            </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="/auth/logout">注销</a>
+            </li>
+            
+            {% else %}
+            <li class="nav-item">
+                    <a class="nav-link" href="/auth/register">注册</a>
+                </li>
+            <li class="nav-item">
+                    <a class="nav-link" href="/auth/login">登录</a>
+                </li>
+            {% endif %}
+        </ul>
 
+    </div>
+    {% if current_user.is_authenticated %}
+    <span class="navbar-text">
+        {{current_user.username}}
+    </span>
+    {% endif %}
+</nav>
+
+{% endblock %}
 {% block content %}
 
 {% endblock %}

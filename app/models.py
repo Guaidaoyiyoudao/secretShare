@@ -41,12 +41,13 @@ class SubSecret(Base):
     id = IntegerField(primary_key=True,index=True)
     user = ForeignKeyField(User,backref="subSecrets")
     secretHash = CharField(unique=True)
-    subSecretHash = CharField()
+    subSecretHash = CharField(unique=True)
 
-    
+
 class Secret(Base):
 
     owner = ForeignKeyField(User,backref="secrets")
     secretHash = CharField(unique=True)
     id = AutoField(primary_key=True)
-    shareNums = IntegerField()
+    shareNums = IntegerField() #分享给了多少个人
+    hasNums = IntegerField() #

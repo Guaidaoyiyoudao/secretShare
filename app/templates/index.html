@@ -1,39 +1,13 @@
 {% extends "Base.html" %}
 
-{% block navbar %}
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{url_for('main.index')}}">秘密共享</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="{{url_for('main.index')}}">Home</a></li>
-            </ul>
-            <ul class="nav navbar-nav">
-                <li><a href="{{url_for('auth.logout')}}">Logout</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-
-                <li><a href="#"><span class="glyphicon glyphicon-user"
-                            aria-hidden="true"></span>{{current_user.username}}</a></li>
-            </ul>
-
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-{% endblock %}
 {% block content%}
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin-top: 20px;">
         <div class="page-header">
-            <h1>我的秘密</h1>
+            <h1 class="text-center text-primary">秘密</h1>
         </div>
-        <table class="table table-hover table-striped table-condensed">
-            <thead class="thead-light">
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">id</th>
                     <th scope="col">secretHash</th>
@@ -42,27 +16,50 @@
                 </tr>
             </thead>
             <tbody>
+                {% for secret in secrets %}
+                <tr>
+                    <th scope="row">{{ secret.id }}</th>
+                    <td>{{ secret.secretHash }}</td>
+                    <td>{{ secret.shareNums }}</td>
+                    <td></td>
+                </tr>
 
+
+                {% endfor %}
 
             </tbody>
         </table>
 
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 20px;">
         <div class="page-header">
-            <h1>我的子秘密</h1>
+            <h1 class="text-center text-primary">子秘密</h1>
         </div>
-        <table class="table table-hover table-striped table-condensed">
-            <thead class="thead-light">
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">id</th>
+                    <th scope="col">所属</th>
                     <th scope="col">secretHash</th>
                     <th scope="col">subSecretHash</th>
+                    <th scope="col">进度</th>
                     <th scope="col">操作</th>
                 </tr>
             </thead>
             <tbody>
 
+                {% for sub in subs %}
+                <tr>
+                    <th scope="row">{{ sub.id }}</th>
+                    <td>{{ sub.owner.username }}</td>
+                    <td>{{ sub.secretHash }}</td>
+                    <td>{{ sub.subSecretHash }}</td>
+                    <td>{{ sub.shareNums }}/{{ sub.hasNums }} </td>
+                    <td></td>
+                </tr>
+
+
+                {% endfor %}
 
             </tbody>
         </table>
