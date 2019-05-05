@@ -33,16 +33,8 @@ class User(UserMixin,Base):
 def load_user(user_id):
     try:
         return User.select().where(User.id==user_id).get()
-    except DoesNotExist as e:
+    except DoesNotExist:
         return None
-
-class SubSecret(Base):
-
-    id = IntegerField(primary_key=True,index=True)
-    user = ForeignKeyField(User,backref="subSecrets")
-    secretHash = CharField(unique=True)
-    subSecretHash = CharField(unique=True)
-
 
 class Secret(Base):
 
@@ -51,3 +43,12 @@ class Secret(Base):
     id = AutoField(primary_key=True)
     shareNums = IntegerField() #分享给了多少个人
     hasNums = IntegerField() #
+
+class SubSecret(Base):
+
+    id = IntegerField(primary_key=True,index=True)
+    user = ForeignKeyField(User,backref="subSecrets")
+    secret = ForeignKeyField(Secret,backref="subSecrets")
+    subSecretHash = CharField(unique=True)
+    img = CharField(unique=True)
+
