@@ -3,9 +3,10 @@ import os
 from flask import Flask
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
+from flask_mail import Mail
 from app.config import Config
 login_manager = LoginManager()
-
+mail = Mail()
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -18,6 +19,10 @@ def create_app(test_config=None):
     login_manager.login_message ="你还没有登录，请先登录！"
     login_manager.login_view='auth.login'
 
+
+    #flask mail
+    mail.init_app(app)
+    
     #bp register
     from .auth import auth
     app.register_blueprint(auth)

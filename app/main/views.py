@@ -21,10 +21,14 @@ def upload():
     form.user.choices = user_list
 
     if form.validate_on_submit():
-        print("hello")
+
         filename = secure_filename(form.img.data.filename)
         img = form.img.data
-        img.save(os.path.join(app.config['UPLOAD_IMAGE_FOLDER'],filename))
+        total = form.shareNums.data
+        need = form.needNums.data
+        users = form.user.data
+        
+        
         return '<h1>success</h1>'
 
     return render_template('upload.html',form=form)

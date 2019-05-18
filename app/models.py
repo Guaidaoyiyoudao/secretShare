@@ -1,6 +1,7 @@
 from peewee import *
 from flask_login import UserMixin
 from app import login_manager
+from secrets import token_hex
 from werkzeug.security import generate_password_hash,check_password_hash
 db = SqliteDatabase('secret.db')
 
@@ -13,12 +14,16 @@ class User(UserMixin,Base):
 
     id = IntegerField(primary_key=True,index=True)
     username = CharField(unique=True)
+    email = CharField(unique=True)
+    verify_token = CharField(unique=True,default=token_hex(32))
+    email_verified = BooleanField(default=False)
     password_hash = CharField()
 
     
     def check_password(self,password_hash,pwd):
         return check_password_hash(password_hash,pwd)
-
+    
+        
     @property
     def password(self):
         return self.password_hash
@@ -43,6 +48,7 @@ class Secret(Base):
     id = AutoField(primary_key=True)
     shareNums = IntegerField() #分享给了多少个人
     hasNums = IntegerField() #
+    needNums = IntegerField()
 
 class SubSecret(Base):
 
@@ -50,5 +56,5 @@ class SubSecret(Base):
     user = ForeignKeyField(User,backref="subSecrets")
     secret = ForeignKeyField(Secret,backref="subSecrets")
     subSecretHash = CharField(unique=True)
-    img = CharField(unique=True)
+    img = CharField(unique=True,default='')
 
