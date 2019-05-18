@@ -105,7 +105,8 @@ def change_password(token):
     
     if form.validate_on_submit():
         try:
-            user = ResetPassword.select().where(ResetPassword.token==token).get().user
+            reset = ResetPassword.select().where(ResetPassword.token==token).get()
+            user = reset.user
         except DoesNotExist as e:
             return redirect(url_for('auth.reset_password'))
         user.password = form.password.data
@@ -113,6 +114,7 @@ def change_password(token):
         if current_user.is_authenticated:
             logout()
         flash("密码更改成功,请用新密码登录!")
+        reset.delete_instance()
         return redirect(url_for('auth.login'))
 
     return render_template('reset_password.html',form=form)

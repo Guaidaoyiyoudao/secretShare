@@ -45,6 +45,7 @@ class ResetPassword(Base):
 class Secret(Base):
 
     owner = ForeignKeyField(User,backref="secrets")
+    name = CharField(unique=True)
     secretHash = CharField(unique=True)
     id = AutoField(primary_key=True)
     shareNums = IntegerField() #分享给了多少个人

@@ -24,11 +24,14 @@ def create_app(test_config=None):
     mail.init_app(app)
     
     #bp register
-    from .auth import auth
+    from app.auth import auth
     app.register_blueprint(auth)
 
-    from .main import main
+    from app.main import main
     app.register_blueprint(main)
+
+    from app.api import api
+    app.register_blueprint(api)
 
 
  
