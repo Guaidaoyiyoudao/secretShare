@@ -32,14 +32,15 @@ class User(UserMixin,Base):
     def password(self, password):
         self.password_hash = generate_password_hash(password)
     
+class ResetPassword(Base):
+
+    id = AutoField(primary_key=True)
+    user = ForeignKeyField(User)
+    token = CharField(unique=True,default=token_hex(32))
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    try:
-        return User.select().where(User.id==user_id).get()
-    except DoesNotExist:
-        return None
+
+
 
 class Secret(Base):
 
@@ -58,3 +59,10 @@ class SubSecret(Base):
     subSecretHash = CharField(unique=True)
     img = CharField(unique=True,default='')
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        return User.select().where(User.id==user_id).get()
+    except DoesNotExist:
+        return None

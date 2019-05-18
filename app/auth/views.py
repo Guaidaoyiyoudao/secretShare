@@ -1,11 +1,11 @@
 from flask import Flask, redirect, render_template, request, url_for,abort,flash
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_mail import Message
-from app.models import User, db
+from app.models import User, db,ResetPassword
 from peewee import DoesNotExist
 
 from app.auth import auth
-from app.auth.forms import LoginForm, RegisterForm
+from app.auth.forms import LoginForm, RegisterForm,ResetForm,ChangeForm
 from app import mail
 
 
@@ -47,7 +47,7 @@ def login():
             user = User.select().where(User.username==form.username.data).get()
         except DoesNotExist as e:
             flash("用户名不存在")
-            return render_template("login.html",form=form)
+            return redirect(url_for('auth.login'))
 
         if user.check_password(user.password,form.password.data):
             if user.email_verified:
@@ -58,7 +58,7 @@ def login():
         else:
             flash('帐号或者密码错误')
     #登录了就直接重定向到首页
-    elif current_user.is_authenticated:
+    elif current_user.is_authenticated and current_user.email_verified:
         return redirect(url_for('main.index'))
     
 
@@ -76,9 +76,46 @@ def verify_email(token):
         flash('邮箱 %s 验证成功,请完成登录'%user.email)
 
     return redirect(url_for('auth.login'))
+
+
+
+@auth.route('/reset_password',methods=['GET','POST'])
+def reset_password():
+    form = ResetForm()
+
+    if form.validate_on_submit():
+
+        email = form.email.data
+        try:
+            user = User.select().where(User.email==email).get()
+        except DoesNotExist as e:
+            flash("邮箱不存在!")
+            return redirect(url_for('auth.reset_password'))
+        reset = ResetPassword(user=user)
+        msg = Message(subject="secretShare - Reset Password",recipients=[user.email],body='click %s to reset password'%url_for('auth.change_password',_external=True,token=reset.token))
+        mail.send(msg)
+        reset.save()
+        flash("更改密码的邮件已经发送到 %s!"%email)
+
+    return render_template('reset_password.html',form=form)
+
+@auth.route('/reset_password/<token>',methods=['GET','POST'])
+def change_password(token):
+    form = ChangeForm()
     
+    if form.validate_on_submit():
+        try:
+            user = ResetPassword.select().where(ResetPassword.token==token).get().user
+        except DoesNotExist as e:
+            return redirect(url_for('auth.reset_password'))
+        user.password = form.password.data
+        user.save()
+        if current_user.is_authenticated:
+            logout()
+        flash("密码更改成功,请用新密码登录!")
+        return redirect(url_for('auth.login'))
 
-
+    return render_template('reset_password.html',form=form)
 
 @auth.route('/logout')
 @login_required

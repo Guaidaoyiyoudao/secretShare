@@ -23,10 +23,13 @@
             {% else %}
             <li class="nav-item">
                     <a class="nav-link" href="{{url_for('auth.register')}}">注册</a>
-                </li>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('auth.reset_password')}}">忘记密码</a>
+            </li>
             <li class="nav-item">
                     <a class="nav-link" href="{{url_for('auth.login')}}">登录</a>
-                </li>
+            </li>
             {% endif %}
         </ul>
 
