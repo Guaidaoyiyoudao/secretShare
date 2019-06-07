@@ -23,10 +23,12 @@ def register():
         except DoesNotExist as e:
             user = User(username=username,password=password,email=email)
 
-            msg = Message(subject="secretShare - email verify",recipients=[user.email],body='click %s to finish verify'%url_for('auth.verify_email',_external=True,token=user.verify_token))
-            mail.send(msg)
-
+            #msg = Message(subject="secretShare - email verify",recipients=[user.email],body='click %s to finish verify'%url_for('auth.verify_email',_external=True,token=user.verify_token))
+            #mail.send(msg)
+            
+            user.email_verified = True
             user.save()
+            
             flash("邮箱验证已经发送到 %s!"%email)
             return redirect(url_for('auth.login'))
             

@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from app import login_manager
 from secrets import token_hex
 from werkzeug.security import generate_password_hash,check_password_hash
+
 db = SqliteDatabase('secret.db')
 
 class Base(Model):
@@ -38,10 +39,6 @@ class ResetPassword(Base):
     user = ForeignKeyField(User)
     token = CharField(unique=True,default=token_hex(32))
 
-
-
-
-
 class Secret(Base):
 
     owner = ForeignKeyField(User,backref="secrets")
@@ -49,8 +46,11 @@ class Secret(Base):
     secretHash = CharField(unique=True)
     id = AutoField(primary_key=True)
     shareNums = IntegerField() #分享给了多少个人
-    hasNums = IntegerField() #
+    hasNums = IntegerField(default=0) #
     needNums = IntegerField()
+    width = IntegerField()
+    height = IntegerField()
+
 
 class SubSecret(Base):
 
@@ -58,7 +58,9 @@ class SubSecret(Base):
     user = ForeignKeyField(User,backref="subSecrets")
     secret = ForeignKeyField(Secret,backref="subSecrets")
     subSecretHash = CharField(unique=True)
+    saved = BooleanField(default=False)
     img = CharField(unique=True,default='')
+    
 
 
 @login_manager.user_loader

@@ -54,7 +54,6 @@
                 <tr>
                     <th scope="col">id</th>
                     <th scope="col">所属</th>
-                    <th scope="col">secretHash</th>
                     <th scope="col">subSecretHash</th>
                     <th scope="col">进度</th>
                     <th scope="col">操作</th>
@@ -65,11 +64,19 @@
                 {% for sub in subs %}
                 <tr>
                     <th scope="row">{{ sub.id }}</th>
-                    <td>{{ sub.owner.username }}</td>
-                    <td>{{ sub.secretHash }}</td>
+                    <td>{{ sub.user.username }}</td>
+                  
                     <td>{{ sub.subSecretHash }}</td>
-                    <td>{{ sub.shareNums }}/{{ sub.hasNums }} </td>
-                    <td></td>
+                    <td>{{ sub.secret.hasNums }}/{{ sub.secret.needNums }} </td>
+                    <td>
+                        {% if sub.saved %}
+
+                           <
+                        {% else %}
+                             <a id="download" class="btn btn-primary" href="{{url_for('main.download',img=sub.img)}}" role="button">下载</a>
+                        {% endif %}
+
+                    </td>
                 </tr>
 
 

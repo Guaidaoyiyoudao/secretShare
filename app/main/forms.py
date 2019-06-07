@@ -40,10 +40,11 @@ class SecUploadForm(FlaskForm):
 
 
     img = FileField("主密码图像",validators=[DataRequired(message="上传主秘密图像！")])
-    shareNums = IntegerField("Share Number",
+    name = StringField("秘密名称",validators=[DataRequired()])
+    shareNums = IntegerField("分享人数",
                             validators=[DataRequired(),NumberRange(min=1,message="最小人数必须大于0")],
                             widget=html5.NumberInput())
-    needNums = IntegerField("Join Number",
+    needNums = IntegerField("参与人数",
                             validators=[DataRequired(),NumberRange(min=1,message="最小人数必须大于0"),Compare('shareNums')],
                             widget=html5.NumberInput())
     user = SelectMultipleField("分发给用户")
