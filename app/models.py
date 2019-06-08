@@ -16,7 +16,7 @@ class User(UserMixin,Base):
     id = IntegerField(primary_key=True,index=True)
     username = CharField(unique=True)
     email = CharField(unique=True)
-    verify_token = CharField(unique=True,default=token_hex(32))
+    verify_token = CharField(unique=False,default=token_hex(32))
     email_verified = BooleanField(default=False)
     password_hash = CharField()
 
@@ -42,8 +42,8 @@ class ResetPassword(Base):
 class Secret(Base):
 
     owner = ForeignKeyField(User,backref="secrets")
-    name = CharField(unique=True)
-    secretHash = CharField(unique=True)
+    name = CharField(unique=False)
+    secretHash = CharField(unique=False)
     id = AutoField(primary_key=True)
     shareNums = IntegerField() #分享给了多少个人
     hasNums = IntegerField(default=0) #
@@ -57,9 +57,10 @@ class SubSecret(Base):
     id = IntegerField(primary_key=True,index=True)
     user = ForeignKeyField(User,backref="subSecrets")
     secret = ForeignKeyField(Secret,backref="subSecrets")
-    subSecretHash = CharField(unique=True)
+    subSecretHash = CharField(unique=False)
     saved = BooleanField(default=False)
-    img = CharField(unique=True,default='')
+    uploaded = BooleanField(default=False)
+    img = CharField(unique=False,default='')
     
 
 

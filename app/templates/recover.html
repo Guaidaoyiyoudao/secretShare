@@ -1,6 +1,6 @@
 {% extends "Base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block title %}上传主秘密{% endblock %}
+{% block title %}发起恢复主秘密{% endblock %}
 
 {% block content %}
 <div class="register-form">
@@ -17,7 +17,7 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    <header>上传</header>
+    <header>恢复</header>
 
     {{ wtf.quick_form(form) }}
 

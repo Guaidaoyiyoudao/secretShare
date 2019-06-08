@@ -30,8 +30,8 @@ class Compare(object):
 
 class SubUploadForm(FlaskForm):
 
-    secret = SelectField("选择主秘密")
-    submit = SubmitField("参与")
+    img = FileField("子密码图像",validators=[DataRequired(message="上传主秘密图像！")])  
+    submit = SubmitField("上传")
 
 
 

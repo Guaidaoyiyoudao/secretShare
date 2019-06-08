@@ -2,6 +2,21 @@
 
 {% block content%}
 <div class="container">
+     <div class="row" style="margin-top: 20px;">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+        {% for message in messages %}
+        <div class="alert alert-info">
+            <a href="#" class="close" data-dismiss="alert">
+                &times;
+            </a>
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
     <div class="row" style="margin-top: 20px;">
         <div class="page-header">
             <h1 class="text-center text-primary">秘密</h1>
@@ -10,6 +25,7 @@
             <thead>
                 <tr>
                     <th scope="col">id</th>
+                    <th scope="col">name</th>
                     <th scope="col">secretHash</th>
                     <th scope="col">共享人数</th>
                     <th scope="col">操作</th>
@@ -19,9 +35,13 @@
                 {% for secret in secrets %}
                 <tr>
                     <th scope="row">{{ secret.id }}</th>
+                     <th scope="row">{{ secret.name }}</th>
                     <td>{{ secret.secretHash }}</td>
                     <td>{{ secret.shareNums }}</td>
-                    <td></td>
+                    <td>
+                        <a id="download" class="btn btn-danger" href="{{url_for('main.delete',id=secret.id)}}" role="button">删除</a>
+
+                    </td>
                 </tr>
 
 
@@ -70,10 +90,20 @@
                     <td>{{ sub.secret.hasNums }}/{{ sub.secret.needNums }} </td>
                     <td>
                         {% if sub.saved %}
+                            {% if sub.uploaded %}
+                                {% if sub.secret.hasNums>= sub.secret.needNums%}
+                                    <a id="upload" class="btn btn-primary" href="{{url_for('main.save',secret=sub.secret.id)}}" role="button">保存主秘密</a>
+                                {% else %}
+                                    <a id="wait" class="btn btn-warning" href="{{url_for('main.index')}}" role="button">等待</a>
+                                {% endif %}
+                                
+                            {% else%}
+                                <a id="upload" class="btn btn-primary" href="{{url_for('main.recover',sub=sub)}}" role="button">恢复</a>
+                            {% endif %}
 
-                           <
+                            
                         {% else %}
-                             <a id="download" class="btn btn-primary" href="{{url_for('main.download',img=sub.img)}}" role="button">下载</a>
+                             <a id="download" class="btn btn-primary" href="{{url_for('main.download',img=sub.img)}}" role="button">下载子秘密</a>
                         {% endif %}
 
                     </td>
